@@ -12,8 +12,8 @@
 					</p>
 					<p
 						v-if="postData.description"
-						v-html="postData.description"
 						class="post-detail__description"
+						v-html="postData.description"
 					/>
 				</div>
 				<div class="post-detail__content" v-html="postData.content" />
@@ -25,67 +25,67 @@
 </template>
 
 <script setup>
-	import { useStore } from 'vuex';
+import { useStore } from 'vuex';
 
-	import OfferNewsButton from '~/components/OfferNewsButton.vue';
-	import GoBack from '~/components/GoBack.vue';
+import OfferNewsButton from '~/components/OfferNewsButton.vue';
+import GoBack from '~/components/GoBack.vue';
 
-	const instance = getCurrentInstance();
-	const router = useRouter();
-	const store    = useStore();
+const instance = getCurrentInstance();
+const router = useRouter();
+const store    = useStore();
 
-	const postData = ref(null);
+const postData = ref(null);
 
-	const { _fetchPostById } = usePosts();
+const { _fetchPostById } = usePosts();
 
-	const fetchPost = async (postId) =>
+const fetchPost = async (postId) =>
+{
+	const { data, error } = await _fetchPostById(postId);
+
+	if (error.value)
 	{
-		const { data, error } = await _fetchPostById(postId);
+		showError();
+		return;
+	}
 
-		if (error.value)
-		{
-			showError();
-			return;
-		}
+	postData.value = data.value;
 
-		postData.value = data.value;
+	store.commit('pushPostInCache', postData.value);
+};
 
-		store.commit('pushPostInCache', postData.value);
-	};
+const getPostDetail = async () =>
+{
+	store.commit('enableLoading', instance.uid);
 
-	const getPostDetail = async () =>
+	const postId = router.currentRoute.value.params.id;
+
+	if (!router.currentRoute.value.params.id)
 	{
-		store.commit('enableLoading', instance.uid);
+		showError();
+		return;
+	}
 
-		const postId = router.currentRoute.value.params.id;
+	const postFromCache = store.getters.cachedPost(postId);
 
-		if (!router.currentRoute.value.params.id)
-		{
-			showError();
-			return;
-		}
+	if (postFromCache)
+		postData.value = postFromCache;
+	else
+		await fetchPost(postId);
 
-		const postFromCache = store.getters.cachedPost(postId);
+	store.commit('disableLoading', instance.uid);
+};
 
-		if (postFromCache)
-			postData.value = postFromCache;
-		else
-			await fetchPost(postId);
+const showError = () =>
+{
+	throw createError({ statusCode: 404, statusMessage: 'Страница не найдена', fatal: true });
+};
 
-		store.commit('disableLoading', instance.uid);
-	};
+await getPostDetail();
 
-	const showError = () =>
-	{
-		throw createError({ statusCode: 404, statusMessage: 'Страница не найдена', fatal: true });
-	};
-
-	await getPostDetail();
-
-	useHead({
-		title: postData.value.title,
-		description: postData.value.description,
-	});
+useHead({
+	title: postData.value.title,
+	description: postData.value.description,
+});
 </script>
 
 <style lang="scss">

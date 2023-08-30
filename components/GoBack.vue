@@ -13,7 +13,7 @@ defineProps({
 	},
 	text:
 	{
-		type: Boolean,
+		type: String,
 		default: 'Назад'
 	},
 });

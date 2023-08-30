@@ -59,7 +59,7 @@ const props = defineProps({
 	},
 	errorText:
 	{
-		type: Boolean,
+		type: String,
 		default: '',
 	},
 	label:

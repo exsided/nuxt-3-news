@@ -152,12 +152,13 @@ const gotoPageNumber = (pageNumber) =>
 
 	transition: .2s ease;
 
-	@media (hover: hover) {
-        &:hover
-        {
-        	color: $blue;
-        }
-    }
+	@media (hover: hover)
+	{
+		&:hover
+		{
+			color: $blue;
+		}
+	}
 
 	&.active{color: #2C2C2C;}
 }

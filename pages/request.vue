@@ -12,8 +12,8 @@
 </template>
 
 <script setup>
-	import PostSubmitForm from '~/components/PostSubmitForm.vue';
-	import GoBack from '~/components/GoBack.vue';
+import PostSubmitForm from '~/components/PostSubmitForm.vue';
+import GoBack from '~/components/GoBack.vue';
 </script>
 
 <style lang="scss">

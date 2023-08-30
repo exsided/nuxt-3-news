@@ -17,7 +17,6 @@
 		bottom: 20px;
 		width: 100%;
 		left: 0;
-		/*margin: 0 auto;*/
 
 		.button { margin: 0 auto; }
 	}

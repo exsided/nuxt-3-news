@@ -36,35 +36,35 @@
 </template>
 
 <script setup>
-	const props = defineProps({
-		id:
+const props = defineProps({
+	id:
 		{
 			type: Number,
 			default: 0,
 		},
-		title:
+	title:
 		{
 			type: String,
 			default: 'Пост',
 		},
-		picture:
+	picture:
 		{
 			type: String,
 			default: '',
 		},
-		description:
+	description:
 		{
 			type: String,
 			default: '',
 		},
-		date:
+	date:
 		{
 			type: String,
 			default: '',
 		}
-	});
+});
 
-	const link = computed(() => `/posts-${props.id}`);
+const link = computed(() => `/posts-${props.id}`);
 </script>
 
 <style lang="scss">

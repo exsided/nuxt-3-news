@@ -25,82 +25,82 @@
 </template>
 
 <script setup>
-	import { useStore } from 'vuex';
+import { useStore } from 'vuex';
 
-	import OfferNewsButton from '~/components/OfferNewsButton.vue';
-	import PostCard from '~/components/PostCard.vue';
-	import PaginationVue from '~/components/UI/Pagination.vue';
+import OfferNewsButton from '~/components/OfferNewsButton.vue';
+import PostCard from '~/components/PostCard.vue';
+import PaginationVue from '~/components/UI/Pagination.vue';
 
-	const instance = getCurrentInstance();
-	const store    = useStore();
-	const route    = useRoute();
+const instance = getCurrentInstance();
+const store    = useStore();
+const route    = useRoute();
 
-	const meta  = ref({
-		page: 1,
-		perPage: 9,
-		totalPosts: 0,
-		totalPages: 0,
-	});
-	const posts = ref([]);
+const meta  = ref({
+	page: 1,
+	perPage: 9,
+	totalPosts: 0,
+	totalPages: 0,
+});
+const posts = ref([]);
 
-	const { _fetchPosts } = usePosts();
+const { _fetchPosts } = usePosts();
 
-	const fetchPosts = async () =>
+const fetchPosts = async () =>
+{
+	store.commit('enableLoading', instance.uid);
+
+	const { data, error } = await _fetchPosts(meta.value.page, meta.value.perPage);
+
+	if (error.value)
 	{
-		store.commit('enableLoading', instance.uid);
+		// eslint-disable-next-line no-console
+		console.log('fetchPosts', error.value);
+		return;
+	}
 
-		const { data, error } = await _fetchPosts(meta.value.page, meta.value.perPage);
+	posts.value = data.value.posts;
+	meta.value = data.value.meta;
 
-		if (error.value)
-		{
-			console.log('fetchPosts', error.value);
-			return;
-		}
+	store.commit('disableLoading', instance.uid);
+};
 
-		posts.value = data.value.posts;
-		meta.value = data.value.meta;
+const paginate = (nextPage) =>
+{
+	meta.value.page = nextPage;
 
-		store.commit('disableLoading', instance.uid);
-	};
+	fetchPosts();
 
-	const paginate = (nextPage) =>
-	{
-		meta.value.page = nextPage;
+	savePageNumberInUrl();
+};
 
-		fetchPosts();
+const savePageNumberInUrl = () =>
+{
+	if (process.server)
+		return;
 
-		savePageNumberInUrl();
-	};
+	const url = new URL(window.location);
 
-	const savePageNumberInUrl = () =>
-	{
-		if (process.server)
-			return;
+	url.searchParams.set('page', meta.value.page);
 
-		const url = new URL(window.location);
+	if (window.location.search === url.search)
+		return;
 
-		url.searchParams.set('page', meta.value.page);
+	window.history.pushState({}, '', url);
+};
 
-		if (window.location.search === url.search)
-			return;
+const checkQueryParams = () =>
+{
+	const page = Number(route.query?.page || 0);
 
-		window.history.pushState({}, '', url);
-	};
+	if (!page)
+		return;
 
-	const checkQueryParams = () =>
-	{
-		console.log(route);
-		const page = Number(route.query?.page || 0);
+	meta.value.page = page;
+};
 
-		if (!page)
-			return;
+checkQueryParams();
 
-		meta.value.page = page;
-	};
-
-	checkQueryParams();
-
-	await fetchPosts();
+await fetchPosts();
 </script>
 
 <style lang="scss">

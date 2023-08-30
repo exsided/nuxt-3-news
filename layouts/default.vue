@@ -9,8 +9,8 @@
 </template>
 
 <script setup>
-	import HeaderVue from '~/components/Header.vue';
-	import MainLoader from '~/components/MainLoader.vue';
+import HeaderVue from '~/components/Header.vue';
+import MainLoader from '~/components/MainLoader.vue';
 </script>
 
 <style lang="scss">

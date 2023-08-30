@@ -4,6 +4,7 @@ export const dateFromatter = (date) =>
 {
 	if (!date)
 	{
+		// eslint-disable-next-line no-console
 		console.log('dateFromatter - неверный формат', date);
 		return '';
 	}
