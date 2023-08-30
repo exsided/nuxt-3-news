@@ -15,7 +15,7 @@ defineProps({
 	{
 		type: Boolean,
 		default: 'Назад'
-	}
+	},
 });
 </script>
 
