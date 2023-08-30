@@ -33,6 +33,7 @@ import PaginationVue from '~/components/UI/Pagination.vue';
 
 const instance = getCurrentInstance();
 const store    = useStore();
+const router   = useRouter();
 const route    = useRoute();
 
 const meta  = ref({
@@ -75,17 +76,10 @@ const paginate = (nextPage) =>
 
 const savePageNumberInUrl = () =>
 {
-	if (process.server)
-		return;
-
-	const url = new URL(window.location);
-
-	url.searchParams.set('page', meta.value.page);
-
-	if (window.location.search === url.search)
-		return;
-
-	window.history.pushState({}, '', url);
+	router.replace({
+		path: '/',
+		query: { page: meta.value.page },
+	});
 };
 
 const checkQueryParams = () =>
@@ -101,6 +95,11 @@ const checkQueryParams = () =>
 checkQueryParams();
 
 await fetchPosts();
+
+useHead({
+	title: 'Список новостей',
+	description: '',
+});
 </script>
 
 <style lang="scss">

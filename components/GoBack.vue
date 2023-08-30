@@ -1,7 +1,18 @@
 <template>
-	<NuxtLink :to="link" class="go-back g-link">
+	<NuxtLink
+		v-if="history"
+		:to="link"
+		class="go-back g-link"
+	>
 		← {{ text }}
 	</NuxtLink>
+	<button
+		v-else
+		class="go-back g-link"
+		@click="router.back()"
+	>
+		← {{ text }}
+	</button>
 </template>
 
 <script setup>
@@ -16,7 +27,14 @@ defineProps({
 		type: String,
 		default: 'Назад'
 	},
+	history:
+	{
+		type: Boolean,
+		default: false,
+	},
 });
+
+const router = useRouter();
 </script>
 
 <style lang="scss">

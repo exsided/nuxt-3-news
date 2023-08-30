@@ -3,7 +3,7 @@
 		<div class="request">
 			<div class="container">
 				<div class="request__wr">
-					<GoBack />
+					<GoBack text="К списку новостей" />
 					<PostSubmitForm />
 				</div>
 			</div>
@@ -14,6 +14,11 @@
 <script setup>
 import PostSubmitForm from '~/components/PostSubmitForm.vue';
 import GoBack from '~/components/GoBack.vue';
+
+useHead({
+	title: 'Предложить новость',
+	description: '',
+});
 </script>
 
 <style lang="scss">
