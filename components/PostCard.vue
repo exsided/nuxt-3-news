@@ -4,7 +4,15 @@
 			:to="link"
 			class="post-card__picture"
 		>
-			<img :src="picture">
+			<img
+				v-if="notFoundPicture"
+				src="/images/picture-not-found.png"
+			>
+			<img
+				v-else
+				:src="picture"
+				@error="showNotFoundPicture"
+			>
 		</NuxtLink>
 		<NuxtLink
 			:to="link"
@@ -38,32 +46,35 @@
 <script setup>
 const props = defineProps({
 	id:
-		{
-			type: Number,
-			default: 0,
-		},
+	{
+		type: Number,
+		default: 0,
+	},
 	title:
-		{
-			type: String,
-			default: 'Пост',
-		},
+	{
+		type: String,
+		default: 'Пост',
+	},
 	picture:
-		{
-			type: String,
-			default: '',
-		},
+	{
+		type: String,
+		default: '',
+	},
 	description:
-		{
-			type: String,
-			default: '',
-		},
+	{
+		type: String,
+		default: '',
+	},
 	date:
-		{
-			type: String,
-			default: '',
-		}
+	{
+		type: String,
+		default: '',
+	}
 });
 
+const notFoundPicture = ref(false);
+
+const showNotFoundPicture = () => notFoundPicture.value = true;
 const link = computed(() => `/posts-${props.id}`);
 </script>
 
@@ -76,10 +87,10 @@ const link = computed(() => `/posts-${props.id}`);
 		padding: 10px 10px 20px;
 		transition: .4s ease;
 		border-radius: 65px 0 5px 5px;
+		box-shadow: rgba(93, 95, 107, 0.1) 0px 0px 20px;
 
 		&:hover
 		{
-			box-shadow: rgba(93, 95, 107, 0.1) 0px 0px 20px;
 			transform: translateY(-5px);
 
 			.post-card__read
