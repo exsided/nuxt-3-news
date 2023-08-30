@@ -7,6 +7,8 @@
 </template>
 
 <script setup>
+import LoaderVue from '~/components/Loader.vue';
+
 import { useStore } from 'vuex';
 
 const store = useStore();
